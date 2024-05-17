@@ -9,6 +9,7 @@ def main():
     maze = Maze(Point(50, 50), 5, 5, 30, 30, win)
 
     maze.draw()
+    maze._break_entrance_and_exit()
 
     win.wait_for_close()
 

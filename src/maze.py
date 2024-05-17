@@ -14,29 +14,41 @@ class Cell:
         self._win = window
 
     def draw(self):
+        if not self._win:
+            return
+
+        color = "#d9d9d9"
         if self.has_left_wall:
-            self._win.draw_line(
-                self._get_left_wall(),
-                "black",
-            )
+            color = "black"
 
+        self._win.draw_line(self._get_left_wall(), color)
+
+        color = "#d9d9d9"
         if self.has_top_wall:
-            self._win.draw_line(
-                self._get_top_wall(),
-                "black",
-            )
+            color = "black"
 
+        self._win.draw_line(
+            self._get_top_wall(),
+            color,
+        )
+
+        color = "#d9d9d9"
         if self.has_right_wall:
-            self._win.draw_line(
-                self._get_right_wall(),
-                "black",
-            )
+            color = "black"
 
+        self._win.draw_line(
+            self._get_right_wall(),
+            color,
+        )
+
+        color = "#d9d9d9"
         if self.has_bottom_wall:
-            self._win.draw_line(
-                self._get_bottom_wall(),
-                "black",
-            )
+            color = "black"
+
+        self._win.draw_line(
+            self._get_bottom_wall(),
+            color,
+        )
 
     def draw_move(self, to_cell, undo=False):
         color = "red"
@@ -106,6 +118,11 @@ class Maze:
                 col.append(cell)
             self._cells.append(col)
 
+    def draw(self):
+        for i in range(self._num_cols):
+            for j in range(self._num_rows):
+                self._draw_cell(i, j)
+
     def _draw_cell(self, i, j):
         if i < 0 or i >= len(self._cells):
             raise ValueError("draw_cell: i coordinate out of bounds")
@@ -117,5 +134,17 @@ class Maze:
         self._animate()
 
     def _animate(self):
+        if not self._win:
+            return
+
         self._win.redraw()
         time.sleep(0.05)
+
+    def _break_entrance_and_exit(self):
+        entrance = (0, 0)
+        self._cells[entrance[0]][entrance[1]].has_top_wall = False
+        self._draw_cell(entrance[0], entrance[1])
+
+        exit = (self._num_cols - 1, self._num_rows - 1)
+        self._cells[exit[0]][exit[1]].has_bottom_wall = False
+        self._draw_cell(exit[0], exit[1])
