@@ -83,6 +83,17 @@ class Tests(unittest.TestCase):
             ],
         )
 
+    def test_reset_visited(self):
+        m1 = MazeBuilder().num_rows(5).num_cols(5).build()
+
+        m1._break_entrance_and_exit()
+        m1._break_walls_r(0, 0)
+
+        m1._reset_cells_visited()
+        for i in range(len(m1._cells)):
+            for j in range(len(m1._cells[i])):
+                self.assertFalse(m1._cells[i][j].visited)
+
 
 if __name__ == "__main__":
     unittest.main()
