@@ -1,6 +1,6 @@
 import unittest
 
-from maze import Maze
+from maze import Maze, MazeBuilder
 from drawing import Point
 
 
@@ -47,6 +47,41 @@ class Tests(unittest.TestCase):
 
         self.assertFalse(m1._cells[0][0].has_top_wall)
         self.assertFalse(m1._cells[11][9].has_bottom_wall)
+
+    def test_in_bounds(self):
+        m1 = MazeBuilder().num_rows(5).num_cols(5).build()
+
+        self.assertTrue(m1._in_bounds(0, 0))
+        self.assertTrue(m1._in_bounds(4, 4))
+        self.assertTrue(m1._in_bounds(0, 4))
+        self.assertTrue(m1._in_bounds(4, 0))
+
+        self.assertFalse(m1._in_bounds(-1, 0))
+        self.assertFalse(m1._in_bounds(0, -1))
+        self.assertFalse(m1._in_bounds(5, 0))
+        self.assertFalse(m1._in_bounds(0, 5))
+        self.assertFalse(m1._in_bounds(5, 5))
+
+    def test_get_neighbors(self):
+        m1 = MazeBuilder().num_rows(5).num_cols(5).build()
+
+        self.assertEqual(m1._get_neighbors(0, 0), [(0, 1), (1, 0)])
+
+        self.assertEqual(m1._get_neighbors(4, 4), [(3, 4), (4, 3)])
+
+        self.assertEqual(m1._get_neighbors(4, 0), [(3, 0), (4, 1)])
+
+        self.assertEqual(m1._get_neighbors(0, 4), [(0, 3), (1, 4)])
+
+        self.assertEqual(
+            m1._get_neighbors(3, 3),
+            [
+                (2, 3),
+                (3, 2),
+                (3, 4),
+                (4, 3),
+            ],
+        )
 
 
 if __name__ == "__main__":
